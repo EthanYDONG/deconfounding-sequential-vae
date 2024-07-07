@@ -1,0 +1,88 @@
+import numpy as np
+import torch.nn as nn
+
+def bconfig():
+    bconfig = {
+        'work_dir': '/media/disk2/dyw/cvae/DRL/vaedtr',
+        'dataset': '/media/disk2/dyw/cvae/DRL/vaedtr/syn_gaussian',
+        'training_data': '/media/disk2/dyw/cvae/DRL/vaedtr/syn_gaussian/synthetic_gaussian_train.npz',
+        'validation_data': '/media/disk2/dyw/cvae/DRL/vaedtr/syn_gaussian/synthetic_gaussian_validation.npz',
+        'testing_data': '/media/disk2/dyw/cvae/DRL/vaedtr/syn_gaussian/synthetic_gaussian_test.npz',
+        'seed': 123,
+        'batch_size': 128,
+        'epoch_start': 0,
+        'epoch_num': 100,
+        'save_every_epoch': 10,
+        'plot_every': 100,
+        'lr': 0.001,
+        'anneal': 0.1,
+        'dropout_rate': 0.5,
+        'is_conv': False,
+        'inference_model_type': 'L',
+        'x_dim': 8,
+        'z_dim': 16,
+        'a_dim': 1,
+        'r_dim': 1,
+        'nsteps': 5,
+        'counter_start': 0
+    }
+    return bconfig
+
+def model_config():
+    base_config = bconfig()
+    config = {
+        'lstm_dim': base_config['z_dim'],
+        'lstm_net_layers': [100],
+        'lstm_net_outlayers': [(base_config['z_dim'], None)],
+        'qzgx_net_layers': [400, 200],
+        'qzgx_net_outlayers': [(base_config['z_dim'], None)],
+        'qzga_net_layers': [100],
+        'qzga_net_outlayers': [(base_config['z_dim'], None)],
+        'qzgr_net_layers': [100],
+        'qzgr_net_outlayers': [(base_config['z_dim'], None)],
+        'qzgr_net_outlayers_sigma': [(base_config['z_dim'], nn.Softplus())],
+        'qzgxar_net_layers': [200],
+        'qzgxar_net_outlayers': [(base_config['z_dim'], None)],
+        'qagx_net_layers': [100],
+        'qagx_net_outlayers': [(base_config['a_dim'], None)],
+        'qrgx_net_layers': [100],
+        'qrgx_net_outlayers': [(1, None)],
+        'qrgx_net_outlayers_sigma':[(1, nn.Softplus())],
+        'pxgz_net_layers': [200, 100],
+        'pxgz_net_outlayers': [(base_config['x_dim'], None)],
+        'pxgz_net_outlayers_sigma': [(base_config['x_dim'], nn.Softplus())],
+        'pagz_net_layers': [200, 100],
+        'pagz_net_outlayers': [(base_config['a_dim'], None)],
+        'pagz_net_outlayers_sigma': [(base_config['a_dim'], nn.Softplus())],
+        'prgza_net_layers': [200, 100],
+        'prgza_net_outlayers': [(1, None)],
+        'prgza_net_outlayers_sigma': [(1, nn.Softplus())],
+        'prga_net_layers': [200, 100],
+        'prga_net_outlayers': [(1, None)],
+        'pzgz_net_layers': [200, 100],
+        'pzgz_net_outlayers': [(base_config['z_dim'], None)],
+        'pzga_net_layers': [200, 100],
+        'pzga_net_outlayers': [(base_config['z_dim'], None)],
+        'pzgza_net_layers': [200, 100],
+        'pzgza_net_outlayers': [(base_config['z_dim'], None)],
+        'pzgza_mu_net_layers': [50],
+        'pzgza_mu_net_outlayers': [(base_config['z_dim'], None)],
+        'pzgza_pregate_net_layers': [50],
+        'pzgza_pregate_net_outlayers': [(base_config['z_dim'], None)],
+        'pzgza_gate_net_layers': [50],
+        'pzgza_gate_net_outlayers': [(base_config['z_dim'], None)],
+        'pzgza_gate_mu_net_layers': [50],
+        'pzgza_gate_mu_net_outlayers': [(base_config['z_dim'], None)],
+        'pzgza_sigma_net_layers': [50],
+        'pzgza_sigma_net_outlayers': [(base_config['z_dim'], nn.Softplus())],
+        'st_net_layers': [50],
+        'st_net_outlayers': [(base_config['z_dim'], None)],
+        'h_mu_net_layers': [50],
+        'h_mu_net_outlayers': [(base_config['z_dim'], None)],
+        'recons_cost': 'l2',
+        'h_sigma_net_layers': [50],
+        'h_sigma_net_outlayers': [(base_config['z_dim'], nn.Softplus())],
+        'gated': False
+    }
+    config.update(base_config)
+    return config
